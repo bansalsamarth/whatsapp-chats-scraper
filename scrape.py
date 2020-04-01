@@ -52,7 +52,7 @@ def scroll_to_top():
 
     #test to identify that program has reached at top of the chat
     while 'Messages you send' not in third_chat:
-        print "Number of chats before scrolling : ", len(chats)
+        print ("Number of chats before scrolling : ", len(chats))
 
         #scroll to the current top chat in browser
         top = chats[0]
@@ -63,7 +63,7 @@ def scroll_to_top():
         chats = driver.find_elements_by_class_name("vW7d1")
         num_chats_after_scroll = len(chats)
 
-        print "Number of chats after scrolling : ", len(chats), "\n"
+        print ("Number of chats after scrolling : ", len(chats), "\n")
         third_chat = chats[2].get_attribute('innerHTML')
 
     return chats
@@ -132,7 +132,7 @@ def process_chat(chat):
         try:
             chat_text = chat.find('div', class_='copyable-text').text
         except:
-            print "error: ", chat, "\n\n\n"
+            print ("error: ", chat, "\n\n\n")
             return chat
 
     try:
@@ -166,7 +166,7 @@ def process_chat(chat):
         urls = list(set([a['href'] for a in chat.find_all('a')]))
 
     except:
-        print "urls extraction issue"
+        print ("urls extraction issue")
         urls = []
 
     return [chat.encode('utf-8'), message_type, unicode(chat_text).encode('utf-8'), sender_number, chat_time, chat_datetime, sender_name.encode('utf-8'), str(urls)]
@@ -188,7 +188,7 @@ def run_scraper():
 
     soup = BeautifulSoup(data)
     chats = soup.find_all('div', class_='vW7d1')
-    print "chats...", len(chats)
+    print ("chats...", len(chats))
 
 
     #get group details
@@ -199,7 +199,7 @@ def run_scraper():
     driver.find_element_by_xpath('//*[@id="app"]/div/div/div[1]/div[3]/span/div/span/div/header/div/div[1]/button/span').click()
 
     group_details =  [group_name.encode('utf-8'), group_created_at, group_id]
-    print group_details
+    print (group_details)
 
     group_data.append(group_details)
     output_to_csv(group_data, 'group_details.csv')
@@ -210,6 +210,6 @@ def run_scraper():
         parsed_chat = process_chat(i)
         chat_data.append([group_id, group_name.encode('utf-8'),group_created_at] + parsed_chat)
 
-    print "chat_data ready..."
+    print ("chat_data ready...")
     output_to_csv(chat_data, 'scraped_data/' + str(group_id) +  '.csv')
-    print "process complete: ", str(group_id) +  '.csv'
+    print ("process complete: ", str(group_id) +  '.csv')
